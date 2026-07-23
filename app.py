@@ -4,6 +4,13 @@ import google.generativeai as genai
 # Page Configuration
 st.set_page_config(page_title="AI Syllabus-to-Panic Calculator", page_icon="🚨", layout="centered")
 
+# Hide Streamlit's default "Press Ctrl+Enter to submit form" text
+st.markdown("""
+    <style>
+    div[data-testid="InputInstructions"] {display: none !important;}
+    </style>
+""", unsafe_allow_html=True)
+
 st.title("🚨 AI Syllabus-to-Panic Calculator")
 st.subheader("Turn exam panic into a step-by-step action plan!")
 
