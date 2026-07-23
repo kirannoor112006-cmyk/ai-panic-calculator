@@ -29,30 +29,44 @@ if submitted:
     elif not subject or not topics:
         st.warning("Please fill in all details before generating!")
     else:
-        try:
-            genai.configure(api_key=api_key)
-            # Standard active model
-            model = genai.GenerativeModel('gemini-1.5-flash')
+        with st.spinner("Analyzing syllabus and calculating panic levels..."):
+            try:
+                genai.configure(api_key=api_key)
 
-            prompt = f"""
-            You are a smart academic advisor. A student needs help planning their study schedule.
-            
-            Subject: {subject}
-            Topics to cover: {topics}
-            Hours remaining until exam: {hours_left} hours
+                # Dynamically find an available model that supports text generation
+                available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+                
+                # Preferred model priority
+                selected_model = None
+                for preferred in ['models/gemini-2.5-flash', 'models/gemini-2.0-flash', 'models/gemini-1.5-flash', 'models/gemini-1.5-pro']:
+                    if preferred in available_models:
+                        selected_model = preferred
+                        break
+                
+                # Fallback to the first available model if priority matches fail
+                if not selected_model and available_models:
+                    selected_model = available_models[0]
 
-            Please provide:
-            1. Panic Level (Low / Medium / High / CRITICAL) with a brief funny explanation.
-            2. A realistic hour-by-hour study plan customized for the remaining time.
-            3. Top 3 quick tips to maximize productivity and avoid burnout.
-            """
+                model = genai.GenerativeModel(selected_model)
 
-            with st.spinner("Analyzing syllabus and calculating panic levels..."):
+                prompt = f"""
+                You are a smart academic advisor. A student needs help planning their study schedule.
+                
+                Subject: {subject}
+                Topics to cover: {topics}
+                Hours remaining until exam: {hours_left} hours
+
+                Please provide:
+                1. Panic Level (Low / Medium / High / CRITICAL) with a brief funny explanation.
+                2. A realistic hour-by-hour study plan customized for the remaining time.
+                3. Top 3 quick tips to maximize productivity and avoid burnout.
+                """
+
                 response = model.generate_content(prompt)
                 
-            st.success("Plan Generated Successfully!")
-            st.markdown("---")
-            st.write(response.text)
+                st.success("Plan Generated Successfully!")
+                st.markdown("---")
+                st.markdown(response.text)
 
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
