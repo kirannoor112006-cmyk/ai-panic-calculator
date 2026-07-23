@@ -31,7 +31,8 @@ if submitted:
     else:
         try:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-pro')
+            # Standard active model
+            model = genai.GenerativeModel('gemini-2.0-flash')
 
             prompt = f"""
             You are a smart academic advisor. A student needs help planning their study schedule.
