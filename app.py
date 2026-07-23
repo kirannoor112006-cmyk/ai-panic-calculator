@@ -10,7 +10,7 @@ st.subheader("Turn exam panic into a step-by-step action plan!")
 # User Inputs
 with st.form("exam_form"):
     subject = st.text_input("Subject Name", placeholder="e.g., Object-Oriented Programming")
-    topics = st.text_area("Topics/Syllabus to Cover", placeholder="e.g., Classes & Objects, Inheritance, Polymorphism, Pointers, File I/O")
+  topics = st.text_area("Topics/Syllabus to Cover", placeholder="e.g., Classes & Objects, Inheritance, Polymorphism, Pointers, File I/O", help="Enter your topics here")
     hours_left = st.number_input("Hours Remaining Until Exam", min_value=1, max_value=168, value=12)
     api_key = st.text_input("Enter your Gemini API Key", type="password")
     
