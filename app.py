@@ -15,7 +15,7 @@ st.write(
 api_key = os.environ.get("GROK_API_KEY") or st.secrets.get("GROK_API_KEY", "")
 
 if not api_key:
-  api_key = st.sidebar.text_input("Enter your Grok API Key:", type="password")
+    api_key = st.sidebar.text_input("Enter your Grok API Key:", type="password")
 
 syllabus_text = st.text_area(
     "Paste your course syllabus / exam topics here:", height=150
@@ -25,19 +25,19 @@ days_left = st.number_input(
 )
 
 if st.button("Calculate Panic Level & Plan 🚨"):
-  if not api_key:
-    st.error("Please enter your Grok API Key in the sidebar!")
-  elif not syllabus_text.strip():
-    st.warning("Please paste your syllabus first!")
-  else:
-    try:
-      # Initialize OpenAI client with xAI Base URL for Grok
-      client = OpenAI(
-          api_key=api_key,
-          base_url="https://api.x.ai/v1",
-      )
+    if not api_key:
+        st.error("Please enter your Grok API Key in the sidebar!")
+    elif not syllabus_text.strip():
+        st.warning("Please paste your syllabus first!")
+    else:
+        try:
+            # Initialize OpenAI client with xAI Base URL for Grok
+            client = OpenAI(
+                api_key=api_key,
+                base_url="https://api.x.ai/v1",
+            )
 
-      prompt = f"""
+            prompt = f"""
             You are a funny yet practical study coach.
             Analyze this syllabus and time left:
             Days Left: {days_left}
@@ -48,19 +48,19 @@ if st.button("Calculate Panic Level & Plan 🚨"):
             2. Step-by-step study strategy divided across the remaining days.
             """
 
-      response = client.chat.completions.create(
-          model="grok-4",  # or grok-2-1212 / grok-vision-beta
-          messages=[
-              {
-                  "role": "system",
-                  "content": "You are a helpful academic assistant.",
-              },
-              {"role": "user", "content": prompt},
-          ],
-      )
+            response = client.chat.completions.create(
+                model="grok_4",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a helpful academic assistant.",
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+            )
 
-      st.success("Analysis Complete!")
-      st.markdown(response.choices[0].message.content)
+            st.success("Analysis Complete!")
+            st.markdown(response.choices[0].message.content)
 
-    except Exception as e:
-      st.error(f"Error: {e}")
+        except Exception as e:
+            st.error(f"Error: {e}")
