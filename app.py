@@ -49,7 +49,7 @@ if st.button("Calculate Panic Level & Plan 🚨"):
             """
 
       response = client.chat.completions.create(
-          model="grok-beta",  # or grok-2-1212 / grok-vision-beta
+          model="grok-4",  # or grok-2-1212 / grok-vision-beta
           messages=[
               {
                   "role": "system",
